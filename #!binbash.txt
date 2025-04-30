@@ -1,0 +1,114 @@
+#!/bin/bash
+# everyady change a dates {30lab0}
+# create only fliesystem
+mkdir /5lab0{1..9}
+for i in {1..9}
+do
+mkfs -t ext4 /dev/sdb$i
+echo
+done
+# then u have to mount a mounted filesystem manuely (1..9)  then use another script
+# delete the 4th line in /etc/fstab file
+
+
+
+#!/bin/bash
+echo
+mkdir /5lab{10..60}
+echo
+# first part - 1
+for i in {1..9}
+do
+echo "/dev/sdb$i        /5lab0$i        ext4    defaults        0       0">> /etc/fstab
+done
+
+for i in {1..9}
+do
+mkdir -p /5user$i/5user1
+#mv /5user$i /5lab0$i
+done
+
+for i in {1..9}
+do
+cp /etc/{passwd,group,shadow,login.defs} /5lab0$i/5user1/
+cp -pvr /etc/skel/.bash* /5lab0$i/5user1/
+done
+
+# second part
+
+for i in {10..60}
+do
+mkfs -t ext4 /dev/sdb$i
+echo
+m in {10..60}
+do
+mkdir -p /5user$i/5user1
+#mv /4user$i /4lab$i
+done
+
+for i in {10..60}
+do
+cp /etc/{passwd,group,shadow,login.defs} /5lab$i/5user1/
+cp -pvr /etc/skel/.bash* /5lab$i/5user1/
+done
+echo
+done
+
+for i in {10..60}
+do
+echo "/dev/sdb$i        /5lab$i        ext4    defaults        0       0">> /etc/fstab
+done
+
+for i in {10..60}
+do
+mkdir -p /5user$i/5user1
+#mv /4user$i /4lab$i
+done
+
+for i in {10..60}
+do
+cp /etc/{passwd,group,shadow,login.defs} /5lab$i/5user1/
+cp -pvr /etc/skel/.bash* /5lab$i/5user1/
+done
+----------------------task-2------------------------
+
+#!/bin/bash
+for i in {1..15}
+do
+mkswap /dev/sdc$i
+swapon /dev/sdc$i
+echo "/dev/sdc$i        swap    swap    defaults        0       0" >> /etc/fstab
+done
+
+-----------------------task-3------------------------
+#!/bin/bash
+# firstly you to add lun sdd size 3gb then use this script
+# chnage the date daily
+mkdir /task5
+mkfs -t ext4 /dev/sdd
+mount -t ext4 /dev/sdd /task5
+echo "/dev/sdd  /task5 ext4    defaults        0       0" >> /etc/fstab
+
+for i in {1..14}
+do
+dd if=/dev/zero of=/task5/swapf$i bs=1M count=130
+mkswap /task5/swapf$i
+swapon /task5/swapf$i
+echo "/task5/swapf$i   swap    swap    defaults        0       0" >> /etc/fstab
+done
+
+-------------------------task-4------------------------------
+
+#!/bin/bash
+echo
+groupadd -g 50000 vnins
+useradd -u 50001 -g 40000 -d /home/linux -s /bin/bash linux
+useradd -u 50002 -g 40000 -M -d /home/unix -s /bin/bash unix
+echo "linux:linux" | chpasswd
+echo "unix:unix" | chpasswd
+mkdir /home/unix
+chmod 700 /home/unix
+chown unix:vnins /home/unix
+cp -pvr /etc/skel/.bash* /home/unix/
+chown unix:vnins /home/unix/.bash*
+[root@vara-sys-65 tmp]#
